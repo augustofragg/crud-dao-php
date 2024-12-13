@@ -10,15 +10,15 @@ class UsuarioDaoMysql implements UsuarioDAO {
     }
 
 
-    public function add(Usuario $usuario) {
+    public function add(Usuario $user) {
         $sql = $this->pdo->prepare('INSERT INTO usuarios (nome,email) VALUES (:nome, :email)');
-        $sql->bindValue(':nome',$usuario->getNome());
-        $sql->bindValue(':email',$usuario->getEmail());
+        $sql->bindValue(':nome',$user->getNome());
+        $sql->bindValue(':email',$user->getEmail());
         $sql->execute();
 
-        $usuario->setId($this->pdo->lastInsertId());
+        $user->setId($this->pdo->lastInsertId());
 
-        return $usuario;
+        return $user;
     }
     public function findAll() {
         $array = [];
@@ -48,7 +48,14 @@ class UsuarioDaoMysql implements UsuarioDAO {
         $sql->bindValue(':email',$email);
         $sql->execute();
         if($sql->rowCount() > 0) {
-            return $email;
+            $data =  $sql->fetch();
+
+            $user = new Usuario;
+            $user->setId($data['id']);
+            $user->setNome($data['nome']);
+            $user->setEmail($data['email']);
+
+            return $user;
         }
         else {
             return false;
