@@ -1,8 +1,10 @@
 <?php
 require "config.php";
-$list = [];
-$sql = $pdo->query("SELECT * FROM usuarios");
-$list = $sql->fetchAll(PDO::FETCH_ASSOC);
+require "dao/UsuarioDaoMysql.php";
+
+$user = new UsuarioDaoMysql($pdo);
+$list = $user->findAll();
+
 ?>
 
 <a href="adicionar.php">ADICIONAR USUÁRIO</a>
@@ -14,14 +16,14 @@ $list = $sql->fetchAll(PDO::FETCH_ASSOC);
     <th>EMAIL</th>
     <th>AÇÕES</th>
 
-  <?php foreach($list as $usuario):?>
+  <?php foreach($list as $user):?>
     <tr>
-        <td><?= $usuario['id'] ?></td>
-        <td><?= $usuario['nome'] ?></td>
-        <td><?= $usuario['email'] ?></td>
+        <td><?= $user->getId()?></td>
+        <td><?= $user->getNome()?></td>
+        <td><?= $user->getEmail()?></td>
         <td>
-            <a href="excluir.php?id=<?= $usuario['id'] ?>" onclick="return confirm('Deseja continuar ?')">Excluir</a>
-            <a href="atualizar.php?id=<?= $usuario['id'] ?>" >Atualizar</a>
+            <a href="excluir.php?id=<?= $user->getId() ?>" onclick="return confirm('Deseja continuar ?')">Excluir</a>
+            <a href="atualizar.php?id=<?= $user->getId()?>" >Atualizar</a>
         </td> 
     </tr>
   <?php endforeach;?>
