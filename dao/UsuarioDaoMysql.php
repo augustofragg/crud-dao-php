@@ -82,6 +82,7 @@ class UsuarioDaoMysql implements UsuarioDAO {
         $sql = $this->pdo->prepare('UPDATE usuarios SET nome = :nome, email = :email WHERE id = :id');
         $sql->bindValue(':id',$usuario->getId());
         $sql->bindValue(':nome',$usuario->getNome());
+        $sql->bindValue(':email',$usuario->getEmail());
         $sql->execute();
 
         return true;
