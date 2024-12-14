@@ -2,8 +2,8 @@
 require "config.php";
 require "dao/UsuarioDaoMysql.php";
 
-$user = new UsuarioDaoMysql($pdo);
-$list = $user->findAll();
+$usuarioDao = new UsuarioDaoMysql($pdo);
+$list = $usuarioDao->findAll();
 
 ?>
 
@@ -16,14 +16,14 @@ $list = $user->findAll();
     <th>EMAIL</th>
     <th>AÇÕES</th>
 
-  <?php foreach($list as $user):?>
+  <?php foreach($list as $usuario):?>
     <tr>
-        <td><?= $user->getId()?></td>
-        <td><?= $user->getNome()?></td>
-        <td><?= $user->getEmail()?></td>
+        <td><?= $usuario->getId()?></td>
+        <td><?= $usuario->getNome()?></td>
+        <td><?= $usuario->getEmail()?></td>
         <td>
-            <a href="excluir.php?id=<?= $user->getId() ?>" onclick="return confirm('Deseja continuar ?')">Excluir</a>
-            <a href="atualizar.php?id=<?= $user->getId()?>" >Atualizar</a>
+            <a href="excluir.php?id=<?= $usuario->getId() ?>" onclick="return confirm('Deseja continuar ?')">Excluir</a>
+            <a href="atualizar.php?id=<?= $usuario->getId()?>" >Atualizar</a>
         </td> 
     </tr>
   <?php endforeach;?>

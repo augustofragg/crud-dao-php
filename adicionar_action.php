@@ -2,19 +2,19 @@
 require 'config.php';
 require 'dao/UsuarioDaoMysql.php';
 
-$user = new UsuarioDaoMysql($pdo);
+$usuarioDao = new UsuarioDaoMysql($pdo);
 
 $name = filter_input(INPUT_POST,"name");
 $email = filter_input(INPUT_POST,"email",FILTER_VALIDATE_EMAIL);
 
 if($name && $email) {
 
-    if($user->findByEmail($email) === false) {
+    if($usuarioDao->findByEmail($email) === false) {
         $novoUsuario = new Usuario();
         $novoUsuario->setNome($name);
         $novoUsuario->setEmail($email);
         
-        $user->add($novoUsuario);
+        $usuarioDao->add($novoUsuario);
         
         header('Location: index.php');
         exit;

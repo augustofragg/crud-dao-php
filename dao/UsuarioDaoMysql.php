@@ -10,15 +10,15 @@ class UsuarioDaoMysql implements UsuarioDAO {
     }
 
 
-    public function add(Usuario $user) {
+    public function add(Usuario $usuario) {
         $sql = $this->pdo->prepare('INSERT INTO usuarios (nome,email) VALUES (:nome, :email)');
-        $sql->bindValue(':nome',$user->getNome());
-        $sql->bindValue(':email',$user->getEmail());
+        $sql->bindValue(':nome',$usuario->getNome());
+        $sql->bindValue(':email',$usuario->getEmail());
         $sql->execute();
 
-        $user->setId($this->pdo->lastInsertId());
+        $usuario->setId($this->pdo->lastInsertId());
 
-        return $user;
+        return $usuario;
     }
     public function findAll() {
         $array = [];
@@ -40,7 +40,23 @@ class UsuarioDaoMysql implements UsuarioDAO {
     }    
     
     public function findById($id) {
+        $sql = $this->pdo->prepare('SELECT * FROM usuarios WHERE id = :id');
+        $sql->bindValue(':id',$id);
+        $sql->execute();
 
+        if($sql->rowCount() > 0) {
+            $data = $sql->fetch();
+
+            $usuario = new Usuario();
+            $usuario->setId($data['id']);
+            $usuario->setNome($data['nome']);
+            $usuario->setEmail($data['email']);
+
+            return $usuario;
+        }
+        else {
+            return false;
+        }
     }
 
     public function findByEmail($email) {
@@ -50,12 +66,12 @@ class UsuarioDaoMysql implements UsuarioDAO {
         if($sql->rowCount() > 0) {
             $data =  $sql->fetch();
 
-            $user = new Usuario;
-            $user->setId($data['id']);
-            $user->setNome($data['nome']);
-            $user->setEmail($data['email']);
+            $usuario = new Usuario;
+            $usuario->setId($data['id']);
+            $usuario->setNome($data['nome']);
+            $usuario->setEmail($data['email']);
 
-            return $user;
+            return $usuario;
         }
         else {
             return false;
@@ -63,7 +79,12 @@ class UsuarioDaoMysql implements UsuarioDAO {
     }
     
     public function update(Usuario $usuario) {
+        $sql = $this->pdo->prepare('UPDATE usuarios SET nome = :nome, email = :email WHERE id = :id');
+        $sql->bindValue(':id',$usuario->getId());
+        $sql->bindValue(':nome',$usuario->getNome());
+        $sql->execute();
 
+        return true;
     }
     public function delete($id) {
 
